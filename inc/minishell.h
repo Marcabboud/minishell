@@ -40,7 +40,7 @@ void	ft_free_node(t_env *node);
 t_state	gest_builtins(t_global *g, t_cmd *cmd);
 int		ft_exit(t_global *g, t_cmd *cmd, bool print);
 int		ft_exit_validate(t_global *g, t_cmd *cmd);
-bool	ft_export(t_global *g, char **str);
+bool	ft_export(t_global *g, char **str, bool multiples);
 bool	ft_cd(t_global *g, char **arr);
 void	ft_unset(t_global *g, char **str);
 t_state	is_format_export(char *str, bool *equal);

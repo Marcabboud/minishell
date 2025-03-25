@@ -78,17 +78,21 @@ static bool	single_export(t_global *g, char *str, int i)
 	return (true);
 }
 
-bool	ft_export(t_global *g, char **str)
+bool	ft_export(t_global *g, char **str, bool multiples)
 {
+	t_env	*tmp;
 	t_state	res;
 	int		i;
 
+	tmp = g->lenv;
+	i = 0;
 	if (!*str)
 		return (print_export(g->lenv), true);
-	i = 0;
-	while (str[i])
+	if (!multiples)
+		return (single_export(g, *str, 0, tmp), VALID);
+	while (str[i] != NULL)
 	{
-		res = is_format_export(str[i], &(bool){0});
+		res = is_format_export(str[i]);
 		if (res == ERROR || res == NONE)
 		{
 			if (res == ERROR && g->exit_val == 0)
@@ -96,7 +100,8 @@ bool	ft_export(t_global *g, char **str)
 			i++;
 			continue ;
 		}
-		single_export(g, str[i++], 0);
+		single_export(g, str[i++], 0, tmp);
 	}
 	return (VALID);
 }
+
