@@ -22,7 +22,7 @@ static bool	update_cwd(t_global *g, char *cwd)
 static bool	simple_cd(t_global *g, char *pl)
 {
 	char	*tmp;
-	*tmp = NULL;
+	tmp = NULL;
 
 	pl = plist(g->lenv, "HOME");
 	if (!pl)
