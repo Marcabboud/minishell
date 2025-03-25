@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static t_state	is_format_export(char *str, bool *equal)
+t_state	is_format_export(char *str, bool *equal)
 {
 	int	i;
 
