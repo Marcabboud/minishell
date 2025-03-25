@@ -78,7 +78,7 @@ static bool	single_export(t_global *g, char *str, int i)
 	return (true);
 }
 
-bool	ft_export(t_global *g, char **str, bool multiples)
+bool	ft_export(t_global *g, char **str)
 {
 	t_state	res;
 	int		i;
