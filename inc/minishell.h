@@ -57,6 +57,10 @@ void	close_all_fd_child(t_global *g);
 int		ft_exec(t_global *g);
 void	exec_cmds(t_global *g);
 void	ft_waitall(t_global *g);
+int		handle_fd_error(t_global *g, int *std_save, bool is_error);
+int		handle_out_error(t_global *g, int *std_save, bool is_error);
+void	gest_shell(t_global *g, int id, int *std_save);
+
 
 /*PARSING*/
 bool	is_syntax_valid(t_global *g, char *str);
