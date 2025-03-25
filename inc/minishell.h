@@ -61,7 +61,7 @@ int		handle_fd_error(t_global *g, int *std_save, bool is_error);
 int		handle_out_error(t_global *g, int *std_save, bool is_error);
 void	gest_shell(t_global *g, int id, int *std_save);
 int		close_fd(t_global *g, int	*std_save, bool is_error);
-int		close_child_fd(t_global *g, int id, int	*std_save);
+void	close_child_fd(t_global *g, int id, int	*std_save);
 
 /*PARSING*/
 bool	is_syntax_valid(t_global *g, char *str);
