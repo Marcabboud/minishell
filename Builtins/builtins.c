@@ -84,12 +84,27 @@ static	t_state	gest_env(t_global *g, char **arr)
 
 t_state	gest_builtins(t_global *g, t_cmd *cmd)
 {
-    if (ft_strcmp(cmd->args[0], "echo"))
-        return (ft_echo(g, cmd));
-    if (ft_strcmp(cmd->args[0], "env") || ft_strcmp(cmd->args[0], "pwd") ||
-        ft_strcmp(cmd->args[0], "unset") || ft_strcmp(cmd->args[0], "cd"))
-        return (gest_env(g, cmd->args));
-    if (ft_strcmp(cmd->args[0], "exit"))
-        return (ft_exit(g, cmd, true));
-    return (NONE);
+	int	i;
+
+	i = 0;
+	if (ft_strcmp(cmd->args[0], "export"))
+	{
+		while (cmd->args[i])
+			i++;
+		if (i > 1)
+			return (ft_export(g, &cmd->args[1], true), VALID);
+		return (ft_export(g, &cmd->args[1], false), VALID);
+	}
+	i = 0;
+	while (cmd->args[i])
+	{
+		cmd->args[i] = remq(cmd->args[i]);
+		i++;
+	}
+	i = 0;
+	if (ft_strcmp(cmd->args[0], "exit"))
+		return (ft_exit(g, cmd, true));
+	if (ft_strcmp(cmd->args[0], "echo"))
+		return (ft_echo(g, cmd));
+	return (gest_env(g, cmd->args));
 }
