@@ -85,3 +85,14 @@ static	t_state	gest_env(t_global *g, char **arr)
     	return (ERROR);
 }
 
+t_state	gest_builtins(t_global *g, t_cmd *cmd)
+{
+    if (ft_strcmp(cmd->args[0], "echo"))
+        return (ft_echo(g, cmd));
+    if (ft_strcmp(cmd->args[0], "env") || ft_strcmp(cmd->args[0], "pwd") ||
+        ft_strcmp(cmd->args[0], "unset") || ft_strcmp(cmd->args[0], "cd"))
+        return (gest_env(g, cmd->args));
+    if (ft_strcmp(cmd->args[0], "exit"))
+        return (ft_exit(g, cmd, true));
+    return (NONE);
+}
