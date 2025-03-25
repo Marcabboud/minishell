@@ -4,7 +4,7 @@ static bool	update_pwd(t_global *g, char *pl, char *tmp)
 {
 	tmp = pwrapper("OLDPWD", pl, '=');
 	free(pl);
-	ft_export(g, &tmp, false);
+	ft_export(g, &tmp);
 	free(tmp);
 	return (true);
 }
@@ -14,7 +14,7 @@ static bool	update_cwd(t_global *g, char *cwd)
 	char	*tmp;
 
 	tmp = pwrapper("PWD", cwd, '=');
-	ft_export(g, &tmp, false);
+	ft_export(g, &tmp);
 	free(tmp);
 	return (true);
 }
