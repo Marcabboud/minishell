@@ -10,11 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC		=	src/main.c\
-			src/utils.c\
-			src/free.c\
-			src/cmd_builder.c\
-			src/cmd_redir_parser.c\
+SRC		=	src/utils/main.c\
+			src/utils/utils.c\
+			src/utils/free.c\
+			src/utils/cmd_builder.c\
+			src/utils/cmd_redir_parser.c\
 			src/parsing/array_builder.c\
 			src/parsing/env_list_builder.c\
 			src/parsing/syntax_checker.c\
@@ -27,10 +27,10 @@ SRC		=	src/main.c\
 			src/builtins/ft_unset.c\
 			src/builtins/ft_cd.c\
 			src/builtins/builtin_cmds.c\
-			src/executor/executor.c\
-			src/executor/ft_exec.c\
-			src/executor/ft_one.c\
-			src/executor/ft_pipes.c
+			src/exec/exec_cmds.c\
+			src/exec/ft_exec.c\
+			src/exec/ft_single_cmds.c\
+			src/exec/ft_pipes.c
 
 SLiB	=	$(wildcard lib/*.c)
 

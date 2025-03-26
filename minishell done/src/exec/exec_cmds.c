@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: eden <eden@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/20 01:34:17 by redrouic          #+#    #+#             */
-/*   Updated: 2025/03/26 09:49:29 by eden             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
 static char	*find_path(t_env *env_list, char **arr)
@@ -73,10 +61,10 @@ void	exec_abs_path(t_global *g, int id)
 		handle_exec_error(g, cmd, env_arr);
 }
 
-void	execve_cmd_path(t_global *g, int id)
+void	exec_path_cmd(t_global *g, int id)
 {
 	char	*path;
-	char	**lenv;
+	char	**env_arr;
 	int		i;
 
 	i = 0;
@@ -86,28 +74,30 @@ void	execve_cmd_path(t_global *g, int id)
 		path = NULL;
 	else
 		path = find_path(g->lenv, g->cmds[id]->args);
-	lenv = env_list_to_arr(g->lenv);
+	env_arr = env_list_to_arr(g->lenv);
 	if (!path)
 	{
 		ft_perror(g->cmds[id]->args[0], 0);
 		ft_perror(": command not found\n", 0);
-		(free_g(g, lenv), exit(127));
+		(free_g(g, env_arr), exit(127));
 	}
-	if (execve(path, g->cmds[id]->args, lenv) == -1)
+	if (execve(path, g->cmds[id]->args, env_arr) == -1)
 	{
 		perror("execve");
-		(free_g(g, lenv), free(path), exit(1));
+		free_g(g, env_arr);
+		free(path);
+		exit(1);
 	}
 }
 
-void	execve_cmd(t_global *g, int id)
+void	exec_cmd(t_global *g, int id)
 {
 	int		i;
 
 	if (g->cmds[id] == NULL)
 	{
 		if (g->cmds[id + 1])
-			execve_cmd(g, id + 1);
+			exec_cmd(g, id + 1);
 		return ;
 	}
 	i = 0;
@@ -120,5 +110,5 @@ void	execve_cmd(t_global *g, int id)
 		}
 		i++;
 	}
-	execve_cmd_path(g, id);
+	exec_path_cmd(g, id);
 }

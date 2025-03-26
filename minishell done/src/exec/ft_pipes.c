@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_pipes.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kpires <kpires@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/01 18:14:52 by kpires            #+#    #+#             */
-/*   Updated: 2025/01/13 11:02:56 by kpires           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
-static int	dup_infile(t_global *g, int id)
+static int	redir_input(t_global *g, int id)
 {
 	if (g->cmds[id]->infile != -1)
 	{
@@ -33,7 +21,7 @@ static int	dup_infile(t_global *g, int id)
 	return (0);
 }
 
-static int	dup_outfile(t_global *g, int id)
+static int	redir_output(t_global *g, int id)
 {
 	if (g->cmds[id]->outfile != -1)
 	{
@@ -49,25 +37,25 @@ static int	dup_outfile(t_global *g, int id)
 	return (0);
 }
 
-static void	exec_pipes(t_global *g, int id)
+static void	exec_pipe_child(t_global *g, int id)
 {
-	if (!set_check_cmd(g, id))
+	if (!prep_cmd_exec(g, id))
 	{
-		if (dup_infile(g, id) || dup_outfile(g, id))
+		if (redir_input(g, id) || redir_output(g, id))
 		{
 			(close(g->cmds[id]->pipe[1]));
 			free_g(g, NULL);
 			ft_perror("Exec: error with dup\n", 0);
 			exit(1);
 		}
-		close_all_fd_child(g);
+		close_child_fds(g);
 		if (dispatch_cmd(g, g->cmds[id]) == NONE)
-			execve_cmd(g, id);
+			exec_cmd(g, id);
 	}
 	(free_g(g, NULL), exit(g->exit_val));
 }
 
-static void	pipe_and_fork(t_global *g, int id)
+static void	spawn_pipe_child(t_global *g, int id)
 {
 	pid_t	pid;
 
@@ -79,7 +67,7 @@ static void	pipe_and_fork(t_global *g, int id)
 	else if (pid == 0)
 	{
 		close(g->cmds[id]->pipe[0]);
-		exec_pipes(g, id);
+		exec_pipe_child(g, id);
 	}
 	g->last_pid = pid;
 	if (g->cmds[id]->infile > 2)
@@ -89,14 +77,14 @@ static void	pipe_and_fork(t_global *g, int id)
 	return ;
 }
 
-void	exec_cmds(t_global *g)
+void	exec_pipes(t_global *g)
 {
 	int		i;
 
 	i = 0;
 	while (g->cmds[i])
 	{
-		pipe_and_fork(g, i);
+		spawn_pipe_child(g, i);
 		close(g->cmds[i]->pipe[1]);
 		if (g->cmds[i + 1])
 		{
@@ -111,5 +99,5 @@ void	exec_cmds(t_global *g)
 	close(g->cmds[i]->pipe[0]);
 	if (g->cmds[i]->prev_fd != -1)
 		close(g->cmds[i]->prev_fd);
-	ft_waitall(g);
+	ft_wait_for_childs(g);
 }

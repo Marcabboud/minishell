@@ -61,13 +61,13 @@ void	signal_ctrd(t_global *g);
 void	heredoc_signal_handler(int sig);
 
 /*EXEC*/
-void	execve_cmd(t_global *g, int id);
-int		set_check_cmd(t_global *g, int id);
+void	exec_cmd(t_global *g, int id);
+int		prep_cmd_exec(t_global *g, int id);
 int		exec_cmd(t_global *g, int id);
-void	close_all_fd_child(t_global *g);
+void	close_child_fds(t_global *g);
 int		ft_exec(t_global *g);
-void	exec_cmds(t_global *g);
-void	ft_waitall(t_global *g);
+void	exec_pipes(t_global *g);
+void	ft_wait_for_childs(t_global *g);
 
 /*PARSING*/
 bool	syntax_is_valid(t_global *g, char *str);

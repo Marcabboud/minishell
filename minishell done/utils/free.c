@@ -75,7 +75,7 @@ void	free_cmds(t_global *g)
 
 	if (!g || !g->cmds)
 		return ;
-	close_all_fd_child(g);
+	close_child_fds(g);
 	i = 0;
 	while (i < g->cnt && g->cmds[i])
 	{
