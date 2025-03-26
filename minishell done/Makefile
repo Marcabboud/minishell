@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC		=	src/utils/main.c\
+SRC		=	src/main.c\
 			src/utils/utils.c\
 			src/utils/free.c\
 			src/utils/cmd_builder.c\
