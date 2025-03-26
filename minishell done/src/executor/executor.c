@@ -60,7 +60,7 @@ static void	handle_exec_error(t_global *g, const char *cmd, char **env_arr)
 	exit(g->exit_val);
 }
 
-void	execve_absolute_path(t_global *g, int id)
+void	exec_abs_path(t_global *g, int id)
 {
 	char	**env_arr;
 	char	*cmd;

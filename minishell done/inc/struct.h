@@ -13,18 +13,6 @@
 #ifndef STRUCT_H
 # define STRUCT_H
 
-/* ---------------------------------- avant --------------------------------- */
-# include <sys/wait.h>
-# define SQUOTE 39
-# define DQUOTE 34
-# define EALL "Error: allocation failed.\n"
-# define UTOK " syntax error near unexpected token "
-# define EID " not a valid identifier\n"
-# define ERR_HD_EOF "warning: here-document delimited by end-of-file\n"
-# define ERR_ALLOC "An error has occured, it may\
- be related with a malloc failure\n"
-
-/* ---------------------------------- apres --------------------------------- */
 # include <sys/wait.h>
 # define SINGLE_QUOTE 39
 # define DOUBLE_QUOTE 34
