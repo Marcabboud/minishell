@@ -10,11 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC		=	src/utils/main.c\
-			src/utils/utils.c\
-			src/utils/free.c\
-			src/utils/cmd_builder.c\
-			src/utils/cmd_redir_parser.c\
+SRC		=	src/main.c\
+			src/utils.c\
+			src/free.c\
+			src/cmd_builder.c\
+			src/cmd_redir_parser.c\
 			src/parsing/array_builder.c\
 			src/parsing/env_list_builder.c\
 			src/parsing/syntax_checker.c\
