@@ -12,59 +12,65 @@
 
 #include "../../inc/minishell.h"
 
-static char	*check_access(t_env *lenv, char **arr)
+static char	*find_path(t_env *env_list, char **arr)
 {
-	char	**tab;
+	char	**path_tokens;
 	char	*path;
 	int		i;
 
 	i = 0;
-	path = get_env_content(lenv, "PATH");
+	path = get_env_content(env_list, "PATH");
 	if (!path)
 		return (NULL);
-	tab = str_to_arr(path, ":", false);
+	path_tokens = str_to_arr(path, ":", false);
 	free(path);
-	if (!tab)
+	if (!path_tokens)
 		return (NULL);
 	path = NULL;
-	while (tab[i] != NULL)
+	while (path_tokens[i] != NULL)
 	{
-		path = pwrapper(tab[i++], arr[0], '/');
+		path = pwrapper(path_tokens[i++], arr[0], '/');
 		if (!path)
-			return (free_arr(tab), NULL);
+			return (free_arr(path_tokens), NULL);
 		if (access(path, X_OK) == 0)
-			return (free_arr(tab), path);
+			return (free_arr(path_tokens), path);
 		free(path);
 		path = NULL;
 	}
-	return (free_arr(tab), NULL);
+	return (free_arr(path_tokens), NULL);
+}
+
+static void	handle_exec_error(t_global *g, const char *cmd, char **env_arr)
+{
+	if (access(cmd, F_OK) == 0)
+	{
+		ft_perror(cmd, 0);
+		if (access(cmd, X_OK) != 0)
+			ft_perror(": Permission denied\n", 0);
+		else
+			ft_perror(": Is a directory\n", 0);
+		g->exit_val = 126;
+	}
+	else
+	{
+		perror(cmd);
+		g->exit_val = 127;
+	}
+	free_g(g, env_arr);
+	exit(g->exit_val);
 }
 
 void	execve_absolute_path(t_global *g, int id)
 {
-	char	**lenv;
+	char	**env_arr;
+	char	*cmd;
+	char	**argv;
 
-	lenv = env_list_to_arr(g->lenv);
-	if (execve(g->cmds[id]->args[0], g->cmds[id]->args, lenv) == -1)
-	{
-		if (access(g->cmds[id]->args[0], F_OK) == 0)
-		{
-			if (access(g->cmds[id]->args[0], X_OK) != 0)
-			{
-				ft_perror(g->cmds[id]->args[0], 0);
-				ft_perror(": Permission denied\n", 0);
-			}
-			else
-			{
-				ft_perror(g->cmds[id]->args[0], 0);
-				ft_perror(": Is a directory\n", 0);
-			}
-			(free_g(g, lenv), exit(126));
-		}
-		else
-			perror(g->cmds[id]->args[0]);
-		(free_g(g, lenv), exit(127));
-	}
+	env_arr = env_list_to_arr(g->lenv);
+	cmd = g->cmds[id]->args[0];
+	argv = g->cmds[id]->args;
+	if (execve(cmd, argv, env_arr) == -1)
+		handle_exec_error(g, cmd, env_arr);
 }
 
 void	execve_cmd_path(t_global *g, int id)
@@ -79,7 +85,7 @@ void	execve_cmd_path(t_global *g, int id)
 	if (g->cmds[id]->args[0][i] == '\0')
 		path = NULL;
 	else
-		path = check_access(g->lenv, g->cmds[id]->args);
+		path = find_path(g->lenv, g->cmds[id]->args);
 	lenv = env_list_to_arr(g->lenv);
 	if (!path)
 	{
@@ -109,7 +115,7 @@ void	execve_cmd(t_global *g, int id)
 	{
 		if (g->cmds[id]->args[0][i] == '/')
 		{
-			execve_absolute_path(g, id);
+			exec_abs_path(g, id);
 			return ;
 		}
 		i++;
