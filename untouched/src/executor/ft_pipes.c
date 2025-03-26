@@ -61,7 +61,7 @@ static void	exec_pipes(t_global *g, int id)
 			exit(1);
 		}
 		close_all_fd_child(g);
-		if (dispatch_cmd(g, g->cmds[id]) == NONE)
+		if (gest_builtins(g, g->cmds[id]) == NONE)
 			execve_cmd(g, id);
 	}
 	(free_g(g, NULL), exit(g->exit_val));

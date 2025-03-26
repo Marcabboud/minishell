@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eden <eden@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/18 00:30:48 by redrouic          #+#    #+#             */
+/*   Updated: 2025/03/26 09:49:29 by eden             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-int	ft_exit(t_global *g, t_cmd *cmd, bool message)
+int	ft_exit(t_global *g, t_cmd *cmd, bool print)
 {
 	int	nb;
 
-	if (message)
+	if (print)
 		printf("exit\n");
 	if (!cmd->args[1] || cmd->args[1] == NULL)
 		(free_g(g, NULL), exit(g->exit_val));
@@ -47,7 +59,7 @@ static t_state	ft_echo(t_global *g, t_cmd *cmd)
 	return (write(1, "\n", 1), g->exit_val = 0, VALID);
 }
 
-static t_state	dispatch_env(t_global *g, char **arr)
+static t_state	gest_env(t_global *g, char **arr)
 {
 	char	*result;
 
@@ -76,7 +88,7 @@ static t_state	dispatch_env(t_global *g, char **arr)
 	return (NONE);
 }
 
-t_state	dispatch_cmd(t_global *g, t_cmd *cmd)
+t_state	gest_builtins(t_global *g, t_cmd *cmd)
 {
 	int	i;
 
@@ -100,5 +112,5 @@ t_state	dispatch_cmd(t_global *g, t_cmd *cmd)
 		return (ft_exit(g, cmd, true));
 	if (ft_strcmp(cmd->args[0], "echo"))
 		return (ft_echo(g, cmd));
-	return (dispatch_env(g, cmd->args));
+	return (gest_env(g, cmd->args));
 }

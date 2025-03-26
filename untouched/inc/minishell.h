@@ -49,12 +49,12 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 void	ft_free_node(t_env *node);
 
 /*BUILTINS*/
-t_state	dispatch_cmd(t_global *g, t_cmd *cmd);
-int		ft_exit(t_global *g, t_cmd *cmd, bool message);
+t_state	gest_builtins(t_global *g, t_cmd *cmd);
+int		ft_exit(t_global *g, t_cmd *cmd, bool print);
 bool	ft_export(t_global *g, char **str, bool multiples);
 bool	ft_cd(t_global *g, char **arr);
 void	ft_unset(t_global *g, char **str);
-t_state	format_export(char *str);
+t_state	is_format_export(char *str);
 
 /*SIGNAL*/
 void	signal_ctrd(t_global *g);

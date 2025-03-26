@@ -116,7 +116,7 @@ int	exec_cmd(t_global *g, int id)
 		g->exit_val = 1;
 		return (g->exit_val);
 	}
-	if (dispatch_cmd(g, g->cmds[id]) == NONE)
+	if (gest_builtins(g, g->cmds[id]) == NONE)
 		gest_shell(g, id, std_save);
 	close_fd(g, std_save, false);
 	return (g->exit_val);

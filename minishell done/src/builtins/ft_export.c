@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_export.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: eden <eden@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/09 23:10:04 by redrouic          #+#    #+#             */
-/*   Updated: 2025/03/26 09:21:56 by eden             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
 static inline bool	is_alpha(char c)
@@ -17,7 +5,7 @@ static inline bool	is_alpha(char c)
 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 }
 
-t_state	is_format_export(char *str)
+t_state	format_export(char *str)
 {
 	bool	equal;
 	int		i;
@@ -42,73 +30,73 @@ t_state	is_format_export(char *str)
 	return (VALID);
 }
 
-static void	print_export(t_env *lenv)
+static void	print_env(t_env *env_list)
 {
 	t_env	*tmp;
-	char	*res;
+	char	*unquoted_val;
 
-	tmp = lenv;
+	tmp = env_list;
 	while (tmp != NULL)
 	{
-		res = remove_quotes(ft_strdup(tmp->content));
-		printf("export %s=\"%s\"\n", tmp->name, res);
-		free(res);
+		unquoted_val = remove_quotes(ft_strdup(tmp->content));
+		printf("export %s=\"%s\"\n", tmp->name, unquoted_val);
+		free(unquoted_val);
 		tmp = tmp->next;
 	}
-	tmp = lenv;
+	tmp = env_list;
 }
 
-static	bool	single_export(t_global *g, char *str, int i, t_env *tmp)
+static	bool	one_env(t_global *g, char *str, int i, t_env *tmp)
 {
-	char	*e_name;
+	char	*env_name;
 
-	if (is_format_export(str) == NONE)
+	if (format_export(str) == NONE)
 		return (true);
-	if (is_format_export(str) == ERROR)
+	if (format_export(str) == ERROR)
 		return (g->exit_val = 1, ft_perror(INVALID_IDENTIFIER, 0), false);
 	while (str[i] && str[i] != '=')
 		i++;
-	e_name = ft_substr(str, 0, i);
+	env_name = ft_substr(str, 0, i);
 	while (tmp)
 	{
-		if (ft_strcmp(e_name, tmp->name))
+		if (ft_strcmp(env_name, tmp->name))
 		{
 			free(tmp->content);
 			tmp->content = remove_quotes(ft_substr(str, i + 1, ft_strlen(str)));
-			return (free(e_name), true);
+			return (free(env_name), true);
 		}
 		if (!tmp->next)
 			break ;
 		tmp = tmp->next;
 	}
-	if (!ft_strcmp(e_name, tmp->name))
+	if (!ft_strcmp(env_name, tmp->name))
 		tmp->next = create_node(str);
-	return (free(e_name), true);
+	return (free(env_name), true);
 }
 
-bool	ft_export(t_global *g, char **str, bool multiples)
+bool	ft_export(t_global *g, char **str, bool arg_nb)
 {
 	t_env	*tmp;
-	t_state	res;
+	t_state	export_state;
 	int		i;
 
 	tmp = g->lenv;
 	i = 0;
 	if (!*str)
-		return (print_export(g->lenv), true);
-	if (!multiples)
-		return (single_export(g, *str, 0, tmp), VALID);
+		return (print_env(g->lenv), true);
+	if (!arg_nb)
+		return (one_env(g, *str, 0, tmp), VALID);
 	while (str[i] != NULL)
 	{
-		res = is_format_export(str[i]);
-		if (res == ERROR || res == NONE)
+		export_state = format_export(str[i]);
+		if (export_state == ERROR || export_state == NONE)
 		{
-			if (res == ERROR && g->exit_val == 0)
+			if (export_state == ERROR && g->exit_val == 0)
 				(ft_perror(INVALID_IDENTIFIER, 0), g->exit_val = 1);
 			i++;
 			continue ;
 		}
-		single_export(g, str[i++], 0, tmp);
+		one_env(g, str[i++], 0, tmp);
 	}
 	return (VALID);
 }
