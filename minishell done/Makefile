@@ -26,7 +26,7 @@ SRC		=	src/main.c\
 			src/builtins/ft_export.c\
 			src/builtins/ft_unset.c\
 			src/builtins/ft_cd.c\
-			src/builtins/builtins.c\
+			src/builtins/builtin_cmds.c\
 			src/executor/executor.c\
 			src/executor/ft_exec.c\
 			src/executor/ft_one.c\
