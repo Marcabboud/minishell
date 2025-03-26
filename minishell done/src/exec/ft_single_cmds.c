@@ -91,7 +91,7 @@ static void	exec_child_cmd(t_global *g, int id, int *saved_fds)
 	ft_wait_for_childs(g);
 }
 
-int	exec_cmd(t_global *g, int id)
+int	execute_cmd(t_global *g, int id)
 {
 	int		saved_fds[3];
 

@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static int	redir_input(t_global *g, int id)
+static int	redirect_input(t_global *g, int id)
 {
 	if (g->cmds[id]->infile != -1)
 	{
@@ -41,7 +41,7 @@ static void	exec_pipe_child(t_global *g, int id)
 {
 	if (!prep_cmd_exec(g, id))
 	{
-		if (redir_input(g, id) || redir_output(g, id))
+		if (redirect_input(g, id) || redir_output(g, id))
 		{
 			(close(g->cmds[id]->pipe[1]));
 			free_g(g, NULL);

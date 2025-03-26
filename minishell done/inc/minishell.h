@@ -63,7 +63,7 @@ void	heredoc_signal_handler(int sig);
 /*EXEC*/
 void	exec_cmd(t_global *g, int id);
 int		prep_cmd_exec(t_global *g, int id);
-int		exec_cmd(t_global *g, int id);
+int		execute_cmd(t_global *g, int id);
 void	close_child_fds(t_global *g);
 int		ft_exec(t_global *g);
 void	exec_pipes(t_global *g);

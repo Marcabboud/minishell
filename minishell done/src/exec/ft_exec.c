@@ -70,7 +70,7 @@ int	ft_exec(t_global *g)
 	if (!g->cnt)
 		return (0);
 	if (g->cnt == 1)
-		return (exec_cmd(g, 0));
+		return (execute_cmd(g, 0));
 	else
 		exec_pipes(g);
 	return (0);
