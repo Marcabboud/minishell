@@ -1,22 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: eden <eden@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 00:30:48 by redrouic          #+#    #+#             */
-/*   Updated: 2025/03/26 09:49:29 by eden             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
-int	ft_exit(t_global *g, t_cmd *cmd, bool print)
+int	ft_exit(t_global *g, t_cmd *cmd, bool message)
 {
 	int	nb;
 
-	if (print)
+	if (message)
 		printf("exit\n");
 	if (!cmd->args[1] || cmd->args[1] == NULL)
 		(free_g(g, NULL), exit(g->exit_val));
