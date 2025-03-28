@@ -1,0 +1,121 @@
+# 1. Commandes simples et basiques
+echo Hello, World!
+pwd
+ls
+ls -l
+ls -la
+whoami
+date
+exit 42
+
+# 2. Gestion des arguments
+echo test argument1 argument2
+cat Makefile
+grep "main" Makefile
+
+# 3. Redirections simples
+echo "test redirection" > test_output.txt
+cat < test_output.txt
+echo "append test" >> test_output.txt
+cat test_output.txt
+> test.txt
+
+# 4. Pipes
+ls -l | grep minishell
+cat Makefile | wc -l
+cat Makefile | grep int | sort
+
+# 5. Enchaînements de pipes avec redirections
+cat Makefile | grep int | sort > result.txt
+cat result.txt
+
+# 6. Builtins
+cd ..
+pwd
+cd minishell
+pwd
+export TEST_VAR=hello
+echo $TEST_VAR
+unset TEST_VAR
+echo $TEST_VAR
+env
+exit
+
+# 7. Variables d’environnement et expansions
+export PATH_TEST=/usr/bin
+echo $PATH_TEST
+echo "$PATH"
+ls $PATH_TEST
+echo '$PATH'
+echo "$PATH"
+
+# 8. Tests d’erreurs
+ahaha
+ls > 
+cat < 
+cd /ahaha
+
+# 9. Gestion des espaces
+echo          "test espaces"
+
+# 10. Quotes et échappements
+echo "test double quotes"
+echo 'test single quotes'
+
+# 11. Redirections combinées et cas limites
+echo "test" > test1.txt > test2.txt
+cat < test1.txt | sort > test_sorted.txt
+
+# 12. Gestion des signaux
+sleep 10
+
+# 13. Erreurs de syntaxe
+ls && pwd
+| ls
+ls |
+
+# 14. Tests des exit codes
+ls Makefile
+echo $?
+
+ls ahaha
+echo $?
+
+# 15. Heredoc
+cat << EOF
+Hello World
+test
+EOF
+
+cat << FIN > heredoc_output.txt
+ahah
+bhbh
+FIN
+cat heredoc_output.txt
+
+grep Hello << EOF
+Hello World
+gg
+EOF
+
+cat << END | sort
+banane
+pomme
+ananas
+END
+
+cat << FIN
+FIN
+
+ahah << EOF
+test
+EOF
+
+cat << EOF
+ahah
+CTRL + \
+EOF
+
+# 16. Leak
+valgrind --leak-check=full --show-leak-kinds=all ./minishell
+valgrind --leak-check=full --track-fds=yes --show-leak-kinds=all ./minishell
